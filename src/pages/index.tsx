@@ -17,7 +17,7 @@ export default function Home() {
         <div className='py-6'>
           <span className='text-white text-xl uppercase font-bold'>Temperature</span>
         </div>
-        <div className='w-full bg-white'>
+        <div className='w-full'>
           <Graph />
         </div>
       </div>
