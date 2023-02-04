@@ -26,7 +26,7 @@ export default function Home() {
 
     setAverage(calculateAverage(onlyTemperatures))
     setData(temperatures)
-    filterData(6)
+    filterData(2)
 
   }, [data])
 
@@ -39,8 +39,10 @@ export default function Home() {
         let filTemps = []
         let filDates = []
         for (let index = 0; index < takenData.length; index++) {
-          filTemps.push(takenData[index].temp)
-          filDates.push(takenData[index].created_at)
+          if(index & 1) {
+            filTemps.push(takenData[index].temp)
+            filDates.push(takenData[index].created_at)
+          }
         }
         setFilteredTemps(filTemps)
         setFilteredDates(filDates)
@@ -56,7 +58,7 @@ export default function Home() {
         setFilteredTemps(filTemps)
         setFilteredDates(filDates)
       }
-    } 
+    }
   }
 
   return (
@@ -76,6 +78,7 @@ export default function Home() {
           <div className='flex flex-row items-center'>
             <label htmlFor='selectHours' className='mr-4 text-white text-sm'>Show:</label>
             <select onChange={(e) => filterData(e.target.value)}>
+              <option value="2">2 hours</option>
               <option value="6">6 hours</option>
               <option value="12">12 hours</option>
               <option value="24">24 hours</option>
