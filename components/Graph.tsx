@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
 export default function Graph({temps, dates}: any) {
+  console.log(temps)
+  console.log(dates)
 
   ChartJS.register(
     CategoryScale,
