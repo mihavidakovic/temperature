@@ -1,14 +1,14 @@
 import Head from 'next/head'
-import { Inter } from '@next/font/google'
 import Graph from 'components/Graph'
 import { temperatures } from "./api/sample.json"
 import { useEffect, useState } from 'react'
+import { Select } from '@mantine/core';
 
 
 export default function Home() {
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<any>(temperatures)
   const [filteredData, setFilteredData] = useState<any[]>()
-  const [selectedHours, setSelectedHours] = useState<any>(12)
+  const [selectedHours, setSelectedHours] = useState<any>(2)
 
   const [filteredTemps, setFilteredTemps] = useState<any>()
   const [filteredDates, setFilteredDates] = useState<any>()
@@ -23,23 +23,24 @@ export default function Home() {
     for (let index = 0; index < temperatures.length; index++) {
       onlyTemperatures.push(temperatures[index].temp);
     }
-
     setAverage(calculateAverage(onlyTemperatures))
-    setData(temperatures)
-    filterData(2)
 
-  }, [data])
+  }, [])
+
+  useEffect(() => {
+    filterData(selectedHours)
+  }, [selectedHours])
 
 
   function filterData(hours: any) {
     if (data) {
-      if (hours === "all") {
+      if (selectedHours === "all") {
         let takenData = data
         setFilteredData(takenData)
         let filTemps = []
         let filDates = []
         for (let index = 0; index < takenData.length; index++) {
-          if(index & 1) {
+          if (index & 1) {
             filTemps.push(takenData[index].temp)
             filDates.push(takenData[index].created_at)
           }
@@ -47,7 +48,7 @@ export default function Home() {
         setFilteredTemps(filTemps)
         setFilteredDates(filDates)
       } else {
-        let takenData = data.slice(-(hours * 60))
+        let takenData = data.slice(-(selectedHours * 60))
         setFilteredData(takenData)
         let filTemps = []
         let filDates = []
@@ -77,13 +78,19 @@ export default function Home() {
           </div>
           <div className='flex flex-row items-center'>
             <label htmlFor='selectHours' className='mr-4 text-white text-sm'>Show:</label>
-            <select onChange={(e) => filterData(e.target.value)}>
-              <option value="2">2 hours</option>
-              <option value="6">6 hours</option>
-              <option value="12">12 hours</option>
-              <option value="24">24 hours</option>
-              <option value="all">all hours</option>
-            </select>
+            <Select
+              placeholder="Pick one"
+              onChange={setSelectedHours}
+              value={selectedHours.toString()}
+              data={[
+                { value: '2', label: '2 hours' },
+                { value: '6', label: '6 hours' },
+                { value: '12', label: '12 hours' },
+                { value: '24', label: '24 hours' },
+                { value: 'all', label: 'all' },
+              ]}
+            />
+
           </div>
         </div>
         <div className='w-full bg-white/5 p-6 rounded-3xl'>
